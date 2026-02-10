@@ -1,0 +1,5 @@
+{
+  "name": "MindBuffer",
+  "description": "An emotional first-aid application using CBT principles and simulated HRV monitoring to provide quick, effective mental relief.",
+  "requestFramePermissions": []
+}
