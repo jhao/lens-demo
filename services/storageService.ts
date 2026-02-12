@@ -1,4 +1,4 @@
-import { STORAGE_KEYS, SessionData, UserSettings } from '../types';
+import { STORAGE_KEYS, SessionData, UserSettings, DailySentence } from '../types';
 
 export const getSettings = (): UserSettings => {
   const stored = localStorage.getItem(STORAGE_KEYS.SETTINGS);
@@ -47,13 +47,30 @@ export const saveSession = (session: SessionData) => {
   localStorage.setItem(STORAGE_KEYS.SESSIONS, JSON.stringify(sessions));
 };
 
+export const getDailySentences = (): DailySentence[] => {
+  const stored = localStorage.getItem(STORAGE_KEYS.DAILY_SENTENCES);
+  if (stored) {
+    return JSON.parse(stored);
+  }
+  return [];
+};
+
+export const saveDailySentence = (sentence: DailySentence) => {
+  const list = getDailySentences();
+  list.push(sentence);
+  localStorage.setItem(STORAGE_KEYS.DAILY_SENTENCES, JSON.stringify(list));
+};
+
 export const clearData = () => {
   localStorage.removeItem(STORAGE_KEYS.SESSIONS);
   localStorage.removeItem(STORAGE_KEYS.SETTINGS);
+  localStorage.removeItem(STORAGE_KEYS.PARENT_STATS);
+  localStorage.removeItem(STORAGE_KEYS.DAILY_SENTENCES);
 };
 
 export const exportData = (): string => {
   const settings = getSettings();
   const sessions = getSessions();
-  return JSON.stringify({ settings, sessions }, null, 2);
+  const daily = getDailySentences();
+  return JSON.stringify({ settings, sessions, daily }, null, 2);
 };

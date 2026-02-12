@@ -1,4 +1,4 @@
-export type ViewState = 'ONBOARDING' | 'HOME' | 'GALLERY' | 'REPORTS' | 'SETTINGS';
+export type ViewState = 'ONBOARDING' | 'HOME' | 'GALLERY' | 'REPORTS' | 'SETTINGS' | 'PARENT_ZONE';
 export type Language = 'en' | 'zh' | 'ja';
 export type AIProvider = 'mock' | 'deepseek';
 
@@ -50,6 +50,15 @@ export interface SessionData {
   type: 'normal' | 'commute' | 'sleep' | 'social';
 }
 
+export type DailyEmotion = 'anger' | 'anxiety' | 'disappointment' | 'calm' | 'encouragement' | 'philosophy' | 'narrative';
+
+export interface DailySentence {
+  id: string;
+  timestamp: number;
+  text: string;
+  emotion: DailyEmotion;
+}
+
 export interface UserSettings {
   nickname: string;
   voiceEnabled: boolean;
@@ -73,4 +82,6 @@ export interface HRVPoint {
 export const STORAGE_KEYS = {
   SETTINGS: 'mindbuffer_settings',
   SESSIONS: 'mindbuffer_sessions',
+  PARENT_STATS: 'mindbuffer_parent_stats',
+  DAILY_SENTENCES: 'mindbuffer_daily_sentences',
 };

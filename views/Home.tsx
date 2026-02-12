@@ -12,9 +12,10 @@ interface HomeProps {
   onTriggerSOS: (currentLevel: number) => void;
   onOpenGallery: () => void;
   onOpenCommute: () => void;
+  onOpenParent: () => void;
 }
 
-const Home: React.FC<HomeProps> = ({ settings, onTriggerSOS, onOpenGallery, onOpenCommute }) => {
+const Home: React.FC<HomeProps> = ({ settings, onTriggerSOS, onOpenGallery, onOpenCommute, onOpenParent }) => {
   const t = translations[settings.language].home;
 
   // HRV Simulation
@@ -130,6 +131,18 @@ const Home: React.FC<HomeProps> = ({ settings, onTriggerSOS, onOpenGallery, onOp
       {/* Quick Access */}
       <h3 className="font-bold text-gray-800 mt-2">{t.scenarios}</h3>
       <div className="grid grid-cols-1 gap-3">
+         {/* Parent Mode */}
+         <Card onClick={onOpenParent} className="flex items-center gap-4 py-4 cursor-pointer hover:bg-green-50 border border-green-100">
+             <div className="p-3 bg-green-100 text-green-600 rounded-xl">
+                <Icon.Users size={24} />
+             </div>
+             <div>
+                <h4 className="font-bold text-gray-800">{t.parent_mode}</h4>
+                <p className="text-xs text-gray-500">{t.parent_desc}</p>
+             </div>
+             <Icon.ChevronRight className="ml-auto text-gray-300" />
+         </Card>
+
          <Card onClick={onOpenCommute} className="flex items-center gap-4 py-4 cursor-pointer hover:bg-gray-50">
              <div className="p-3 bg-orange-100 text-orange-600 rounded-xl">
                 <Icon.Train size={24} />

@@ -32,6 +32,8 @@ export const translations = {
       scenarios: "Scenarios",
       commute_mode: "Commute Mode",
       commute_desc: "Quick shift for the subway",
+      parent_mode: "Parent Zone",
+      parent_desc: "Tools for peaceful parenting",
       morning: "Morning",
       social: "Social",
       sleep: "Sleep",
@@ -111,6 +113,59 @@ export const translations = {
       ask_b_normal: "I hear you. What thoughts are crossing your mind about this event?",
       ask_c: "Got it. And how does that make you feel right now? (e.g., Anxious, Angry, Sad)",
       transition: "Okay, I have the full picture. Let's try some Lens Magic to see this differently. Ready?",
+    },
+    parent: {
+        title: "Parent Zone",
+        btn_calm: "I Need to Calm Down",
+        btn_daily: "Daily Unsaid Words",
+        btn_scripts: "Wisdom Scripts",
+        calm_title: "60s Calm Down Pod",
+        calm_instruction: "Take a deep breath. Inhale... Exhale...",
+        select_emotion: "How do you feel?",
+        emotions: {
+            anger: "Anger",
+            anxiety: "Anxiety",
+            disappointment: "Disappointment",
+            helplessness: "Helplessness"
+        },
+        replacement_phrase: "Try saying this instead:",
+        result_saved: "You avoided a conflict! Well done.",
+        daily_question: "What did you want to say to your child today but didn't?",
+        daily_placeholder: "Type here...",
+        daily_saved: "Recorded. Your pattern is improving.",
+        daily_analyzing: "AI is analyzing your emotion...",
+        daily_history: "History",
+        daily_write: "Write",
+        daily_empty_date: "No entries for this date.",
+        daily_tags: {
+            anger: "Anger",
+            anxiety: "Anxiety",
+            disappointment: "Disappointment",
+            calm: "Calm",
+            encouragement: "Encouragement",
+            philosophy: "Philosophy",
+            narrative: "Narrative"
+        },
+        scripts_title: "Communication Toolkit",
+        script_do: "✅ Try saying:",
+        script_dont: "❌ Don't say:",
+        scenarios: {
+            homework: "Homework Dragging",
+            grades: "Bad Grades",
+            phone: "Phone Addiction",
+            backtalk: "Backtalk",
+            exam: "Exam Anxiety",
+            teacher: "Teacher Criticism"
+        },
+        stats_calm_count: "Calm Downs",
+        stats_conflict_avoided: "Conflict Avoided",
+        calm_phrases: [
+            "I love you, and we will figure this out together.",
+            "This moment is hard, but I can handle it.",
+            "Connection before correction.",
+            "I am their safe space, not their enemy.",
+            "This is not an emergency."
+        ]
     }
   },
   zh: {
@@ -146,6 +201,8 @@ export const translations = {
       scenarios: "场景模式",
       commute_mode: "通勤模式",
       commute_desc: "地铁上的快速转换",
+      parent_mode: "家长专区",
+      parent_desc: "亲子沟通的智慧锦囊",
       morning: "晨间",
       social: "社交",
       sleep: "睡眠",
@@ -225,6 +282,59 @@ export const translations = {
       ask_b_normal: "我明白了。你现在对这件事有什么想法？",
       ask_c: "收到。这让你现在感觉如何？（比如：焦虑、愤怒、难过）",
       transition: "好的，我有画面了。让我们用透镜魔法来看看这件事。准备好了吗？",
+    },
+    parent: {
+        title: "家长专区",
+        btn_calm: "我需要冷静",
+        btn_daily: "今日一句话",
+        btn_scripts: "找话术",
+        calm_title: "60秒冷静舱",
+        calm_instruction: "深呼吸。吸气... 呼气...",
+        select_emotion: "现在感觉如何？",
+        emotions: {
+            anger: "生气",
+            anxiety: "焦虑",
+            disappointment: "失望",
+            helplessness: "无助"
+        },
+        replacement_phrase: "试着说这一句：",
+        result_saved: "您避免了1次亲子冲突，为自己点赞！",
+        daily_question: "今天最想对孩子说，但没说出口的话是什么？",
+        daily_placeholder: "在这里记录...",
+        daily_saved: "已记录。您的情绪觉察能力正在提升。",
+        daily_analyzing: "AI 正在分析情绪...",
+        daily_history: "历史记录",
+        daily_write: "记录",
+        daily_empty_date: "该日期没有记录。",
+        daily_tags: {
+            anger: "生气",
+            anxiety: "焦虑",
+            disappointment: "失望",
+            calm: "平静",
+            encouragement: "鼓励",
+            philosophy: "哲理",
+            narrative: "叙事"
+        },
+        scripts_title: "智慧话术库",
+        script_do: "✅ 可以这样说：",
+        script_dont: "❌ 不要这样说：",
+        scenarios: {
+            homework: "作业拖拉",
+            grades: "成绩不理想",
+            phone: "沉迷手机",
+            backtalk: "顶嘴对抗",
+            exam: "考前焦虑",
+            teacher: "被老师批评"
+        },
+        stats_calm_count: "冷静次数",
+        stats_conflict_avoided: "避免冲突",
+        calm_phrases: [
+            "我爱你，我们会一起解决这个问题。",
+            "此刻很难，但我能从容应对。",
+            "先连接情感，再纠正行为。",
+            "我是他们风暴中的避风港。",
+            "这并不是紧急情况，慢慢来。"
+        ]
     }
   },
   ja: {
@@ -260,6 +370,8 @@ export const translations = {
       scenarios: "シナリオ",
       commute_mode: "通勤モード",
       commute_desc: "地下鉄でのクイックシフト",
+      parent_mode: "保護者ゾーン",
+      parent_desc: "穏やかな子育てツール",
       morning: "朝",
       social: "社交",
       sleep: "睡眠",
@@ -339,6 +451,59 @@ export const translations = {
       ask_b_normal: "なるほど。それについて今どう考えていますか？",
       ask_c: "了解です。それで今どんな気分ですか？（例：不安、怒り、悲しみ）",
       transition: "わかりました、状況は見えました。レンズの魔法で別の視点から見てみましょう。準備はいいですか？",
+    },
+    parent: {
+        title: "保護者ゾーン",
+        btn_calm: "落ち着きたい",
+        btn_daily: "言わなかった言葉",
+        btn_scripts: "知恵のスクリプト",
+        calm_title: "60秒カームポッド",
+        calm_instruction: "深呼吸してください。吸って... 吐いて...",
+        select_emotion: "今の気分は？",
+        emotions: {
+            anger: "怒り",
+            anxiety: "不安",
+            disappointment: "失望",
+            helplessness: "無力感"
+        },
+        replacement_phrase: "代わりにこう言ってみましょう：",
+        result_saved: "衝突を回避しました！素晴らしい。",
+        daily_question: "今日、子供に言いたかったけれど言わなかったことは？",
+        daily_placeholder: "ここに入力...",
+        daily_saved: "記録しました。感情のパターンが改善されています。",
+        daily_analyzing: "AIが感情を分析中...",
+        daily_history: "履歴",
+        daily_write: "記録",
+        daily_empty_date: "この日の記録はありません。",
+        daily_tags: {
+            anger: "怒り",
+            anxiety: "不安",
+            disappointment: "失望",
+            calm: "穏やか",
+            encouragement: "励まし",
+            philosophy: "哲学",
+            narrative: "物語"
+        },
+        scripts_title: "コミュニケーションツール",
+        script_do: "✅ こう言いましょう：",
+        script_dont: "❌ これは言わないで：",
+        scenarios: {
+            homework: "宿題をしない",
+            grades: "成績が悪い",
+            phone: "スマホ依存",
+            backtalk: "口答え",
+            exam: "試験前の不安",
+            teacher: "先生からの注意"
+        },
+        stats_calm_count: "冷静回数",
+        stats_conflict_avoided: "衝突回避",
+        calm_phrases: [
+            "愛しているよ。一緒に解決しよう。",
+            "今は辛いけど、私なら大丈夫。",
+            "正す前に、まずは心を通わせよう。",
+            "私は嵐の中の避難場所。",
+            "これは緊急事態じゃない。落ち着いて。"
+        ]
     }
   }
 };

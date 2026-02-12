@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { ABCRecord, LensCard, MicroAction, SessionData, UserSettings } from '../types';
 import Button from '../components/Button';
 import Card from '../components/Card';
-import { generateLensCards, generateMicroActions, generateThemeName, calculateGrowthValue } from '../services/aiService';
+import { generateLensCards, generateMicroActions, generateThemeName, calculateGrowthValue, generateChatResponse } from '../services/aiService';
 import * as Icon from 'lucide-react';
 import { translations } from '../utils/translations';
 
@@ -24,6 +24,7 @@ const SessionFlow: React.FC<SessionFlowProps> = ({ onClose, initialHRV, settings
   const [abc, setAbc] = useState<ABCRecord>({ a: '', b: '', c: '' });
   const [currentInput, setCurrentInput] = useState('');
   const [chatStage, setChatStage] = useState<'A'|'B'|'C'|'DONE'>('A');
+  const [isTyping, setIsTyping] = useState(false);
   
   const [lenses, setLenses] = useState<LensCard[]>([]);
   const [selectedLens, setSelectedLens] = useState<LensCard | null>(null);
@@ -63,34 +64,67 @@ const SessionFlow: React.FC<SessionFlowProps> = ({ onClose, initialHRV, settings
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, settings.tone, tAi]);
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (!currentInput.trim()) return;
     
-    const newMessages = [...messages, { sender: 'user' as const, text: currentInput }];
-    setMessages(newMessages);
+    // 1. Update UI with User Message
+    const userMsg = { sender: 'user' as const, text: currentInput };
+    setMessages(prev => [...prev, userMsg]);
     setCurrentInput('');
+    setIsTyping(true);
 
-    // Simulate AI delay
-    setTimeout(() => {
-      let botResponse = '';
-      if (chatStage === 'A') {
-        setAbc(prev => ({ ...prev, a: currentInput }));
-        setChatStage('B');
-        botResponse = settings.tone === 'funny' ? tAi.ask_b_funny : tAi.ask_b_normal;
-      } else if (chatStage === 'B') {
-        setAbc(prev => ({ ...prev, b: currentInput }));
-        setChatStage('C');
-        botResponse = tAi.ask_c;
-      } else if (chatStage === 'C') {
-        setAbc(prev => ({ ...prev, c: currentInput }));
-        setChatStage('DONE');
-        botResponse = tAi.transition;
+    // 2. Update ABC State and Determine Next Stage
+    let nextStage = chatStage;
+    if (chatStage === 'A') {
+      setAbc(prev => ({ ...prev, a: currentInput }));
+      nextStage = 'B';
+    } else if (chatStage === 'B') {
+      setAbc(prev => ({ ...prev, b: currentInput }));
+      nextStage = 'C';
+    } else if (chatStage === 'C') {
+      setAbc(prev => ({ ...prev, c: currentInput }));
+      nextStage = 'DONE';
+    }
+    setChatStage(nextStage);
+
+    // 3. Generate Bot Response (AI or Mock)
+    try {
+      let botText = "";
+
+      // Check if we should use Real AI
+      if (settings.aiProvider === 'deepseek' && settings.apiKey) {
+        // We pass the NEXT stage because that determines what the bot should ASK next.
+        // e.g., if we just moved to 'B', bot should ask about Beliefs.
+        const aiResponse = await generateChatResponse(settings, [...messages, userMsg], nextStage as any);
+        if (aiResponse) {
+           botText = aiResponse;
+        }
       }
 
-      if (botResponse) {
-        setMessages(prev => [...prev, { sender: 'bot', text: botResponse }]);
+      // Fallback to Mock if AI failed or not configured
+      if (!botText) {
+        // Simulate delay only for mock
+        await new Promise(r => setTimeout(r, 800));
+        
+        if (nextStage === 'B') {
+          botText = settings.tone === 'funny' ? tAi.ask_b_funny : tAi.ask_b_normal;
+        } else if (nextStage === 'C') {
+          botText = tAi.ask_c;
+        } else if (nextStage === 'DONE') {
+          botText = tAi.transition;
+        }
       }
-    }, 800);
+
+      if (botText) {
+        setMessages(prev => [...prev, { sender: 'bot', text: botText }]);
+      }
+
+    } catch (e) {
+      console.error(e);
+      setMessages(prev => [...prev, { sender: 'bot', text: "..." }]);
+    } finally {
+      setIsTyping(false);
+    }
   };
 
   const startLensPhase = async () => {
@@ -189,6 +223,15 @@ const SessionFlow: React.FC<SessionFlowProps> = ({ onClose, initialHRV, settings
             </div>
           </div>
         ))}
+        {isTyping && (
+           <div className="flex justify-start animate-fade-in">
+             <div className="bg-white border border-gray-100 shadow-sm p-3 rounded-2xl rounded-bl-none flex gap-1">
+               <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0s' }} />
+               <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
+               <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }} />
+             </div>
+           </div>
+        )}
         <div ref={messagesEndRef} />
       </div>
       <div className="p-4 bg-white border-t border-gray-100">
@@ -197,15 +240,18 @@ const SessionFlow: React.FC<SessionFlowProps> = ({ onClose, initialHRV, settings
         ) : (
           <div className="flex gap-2">
             <input 
-              className="flex-1 border border-gray-200 rounded-xl px-4 py-2 outline-none focus:border-primary"
+              className="flex-1 border border-gray-200 rounded-xl px-4 py-2 outline-none focus:border-primary disabled:bg-gray-50"
               placeholder={t.type_here}
               value={currentInput}
+              disabled={isTyping}
               onChange={e => setCurrentInput(e.target.value)}
-              onKeyDown={e => e.key === 'Enter' && handleSendMessage()}
+              onKeyDown={e => e.key === 'Enter' && !isTyping && handleSendMessage()}
             />
-            <Button onClick={handleSendMessage} size="sm"><Icon.Send size={18} /></Button>
+            <Button onClick={handleSendMessage} size="sm" disabled={isTyping || !currentInput.trim()}>
+               <Icon.Send size={18} />
+            </Button>
             {/* Mock Voice Input */}
-            <Button variant="outline" size="sm" onClick={() => setCurrentInput("I'm feeling overwhelmed by the project deadline.")}>
+            <Button variant="outline" size="sm" disabled={isTyping} onClick={() => setCurrentInput("I'm feeling overwhelmed by the project deadline.")}>
                <Icon.Mic size={18} />
             </Button>
           </div>

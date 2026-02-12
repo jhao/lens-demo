@@ -7,6 +7,7 @@ import Gallery from './views/Gallery';
 import Reports from './views/Reports';
 import Settings from './views/Settings';
 import SessionFlow from './views/SessionFlow';
+import ParentZone from './views/ParentZone';
 import Button from './components/Button';
 import * as Icon from 'lucide-react';
 import { translations } from './utils/translations';
@@ -81,16 +82,18 @@ const App: React.FC = () => {
   const tSos = translations[safeSettings.language].sos;
   const tNav = translations[safeSettings.language].nav;
 
+  // IMPORTANT: Layout structure changed to fixed viewport height
   return (
-    <div className="max-w-md mx-auto bg-surface min-h-screen relative shadow-2xl overflow-hidden">
+    <div className="max-w-md mx-auto bg-surface h-[100dvh] flex flex-col relative shadow-2xl overflow-hidden">
       
-      {/* Main Content Area */}
-      <div className="h-full overflow-y-auto no-scrollbar">
+      {/* Main Content Area (Scrollable) */}
+      <div className="flex-1 overflow-y-auto no-scrollbar relative">
         {currentView === 'HOME' && (
           <Home 
             settings={safeSettings} 
             onTriggerSOS={handleTriggerSOS} 
             onOpenGallery={() => setCurrentView('GALLERY')}
+            onOpenParent={() => setCurrentView('PARENT_ZONE')}
             onOpenCommute={() => {
                 setTriggerLevel(50);
                 setSessionActive(true); // Direct start
@@ -100,11 +103,12 @@ const App: React.FC = () => {
         {currentView === 'GALLERY' && <Gallery language={safeSettings.language} />}
         {currentView === 'REPORTS' && <Reports language={safeSettings.language} />}
         {currentView === 'SETTINGS' && <Settings settings={safeSettings} updateSettings={handleUpdateSettings} />}
+        {currentView === 'PARENT_ZONE' && <ParentZone settings={safeSettings} onBack={() => setCurrentView('HOME')} />}
       </div>
 
-      {/* Bottom Nav */}
-      <div className="absolute bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-6 py-3 flex justify-between items-center z-10">
-        <button onClick={() => setCurrentView('HOME')} className={`flex flex-col items-center ${currentView === 'HOME' ? 'text-primary' : 'text-gray-400'}`}>
+      {/* Bottom Nav (Fixed) */}
+      <div className="flex-none bg-white border-t border-gray-200 px-6 py-3 flex justify-between items-center z-20">
+        <button onClick={() => setCurrentView('HOME')} className={`flex flex-col items-center ${currentView === 'HOME' || currentView === 'PARENT_ZONE' ? 'text-primary' : 'text-gray-400'}`}>
           <Icon.Home size={24} />
           <span className="text-[10px] mt-1">{tNav.home}</span>
         </button>
@@ -113,10 +117,10 @@ const App: React.FC = () => {
           <span className="text-[10px] mt-1">{tNav.gallery}</span>
         </button>
         {/* FAB for manual trigger */}
-        <div className="relative -top-6">
+        <div className="relative -top-8">
            <button 
              onClick={() => handleTriggerSOS(60)}
-             className="w-14 h-14 rounded-full bg-secondary text-white shadow-lg shadow-secondary/40 flex items-center justify-center transform transition-transform active:scale-90"
+             className="w-14 h-14 rounded-full bg-secondary text-white shadow-lg shadow-secondary/40 flex items-center justify-center transform transition-transform active:scale-90 border-4 border-gray-50"
            >
              <Icon.Zap size={28} fill="currentColor" />
            </button>
